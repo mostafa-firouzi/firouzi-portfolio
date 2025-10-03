@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Taschenrechner</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 400px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #f0f0f0;
+        border-radius: 10px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      #display {
+        width: 100%;
+        font-size: 24px;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: right;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background: #fff;
+      }
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+      button {
+        padding: 18px;
+        font-size: 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #e0e0e0;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background: #d4d4d4;
+      }
+      .operator {
+        background: #f9a825;
+        color: white;
+      }
+      .operator:hover {
+        background: #c17900;
+      }
+      #clear {
+        background: #e53935;
+        color: white;
+      }
+      #clear:hover {
+        background: #b71c1c;
+      }
+      #equals {
+        grid-column: span 4;
+        background: #43a047;
+        color: white;
+      }
+      #equals:hover {
+        background: #2e7d32;
+      }
+      nav {
+        margin-top: 20px;
+        text-align: center;
+      }
+      nav a {
+        text-decoration: none;
+        color: #3498db;
+        font-weight: bold;
+      }
+      @media (max-width: 600px) {
+        body {
+          max-width: 98vw;
+          margin: 10px auto;
+          padding: 8vw 2vw;
+          font-size: 4vw;
+        }
+        h1 {
+          font-size: 7vw;
+          margin-bottom: 5vw;
+        }
+        #display {
+          font-size: 6vw;
+          padding: 3vw;
+          margin-bottom: 6vw;
+        }
+        .buttons {
+          gap: 3vw;
+        }
+        button {
+          padding: 6vw;
+          font-size: 6vw;
+        }
+        nav {
+          margin-top: 6vw;
+        }
+        nav a {
+          font-size: 5vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Taschenrechner</h1>
+    <input type="text" id="display" disabled />
+    <div class="buttons">
+      <button data-value="7">7</button>
+      <button data-value="8">8</button>
+      <button data-value="9">9</button>
+      <button class="operator" data-value="/">÷</button>
+
+      <button data-value="4">4</button>
+      <button data-value="5">5</button>
+      <button data-value="6">6</button>
+      <button class="operator" data-value="*">×</button>
+
+      <button data-value="1">1</button>
+      <button data-value="2">2</button>
+      <button data-value="3">3</button>
+      <button class="operator" data-value="-">−</button>
+
+      <button data-value="0">0</button>
+      <button data-value=".">.</button>
+      <button id="clear">C</button>
+      <button class="operator" data-value="+">+</button>
+
+      <button id="equals">=</button>
+    </div>
+
+    <nav>
+      <a href="index.html">Zurück zur Projektseite</a>
+    </nav>
+
+    <script>
+      const display = document.getElementById("display");
+      const buttons = document.querySelectorAll("button");
+      let currentInput = "";
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = button.getAttribute("data-value");
+
+          if (button.id === "clear") {
+            currentInput = "";
+            display.value = "";
+            return;
+          }
+
+          if (button.id === "equals") {
+            try {
+              currentInput = eval(currentInput).toString();
+              display.value = currentInput;
+            } catch {
+              display.value = "Error";
+              currentInput = "";
+            }
+            return;
+          }
+          const lastChar = currentInput.slice(-1);
+          const operators = ["+", "-", "*", "/"];
+
+          if (operators.includes(value)) {
+            if (currentInput === "" || operators.includes(lastChar)) {
+              return;
+            }
+          }
+
+          currentInput += value;
+          display.value = currentInput;
+        });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const key = event.key;
+
+        const allowedKeys = [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "+",
+          "-",
+          "*",
+          "/",
+          ".",
+          "Enter",
+          "Backspace",
+          "Escape",
+        ];
+
+        if (!allowedKeys.includes(key)) return;
+
+        if (key === "Enter") {
+          try {
+            currentInput = eval(currentInput).toString();
+            display.value = currentInput;
+          } catch {
+            display.value = "Error";
+            currentInput = "";
+          }
+          event.preventDefault();
+          return;
+        }
+
+        if (key === "Backspace") {
+          currentInput = currentInput.slice(0, -1);
+          display.value = currentInput;
+          event.preventDefault();
+          return;
+        }
+
+        if (key === "Escape") {
+          currentInput = "";
+          display.value = "";
+          event.preventDefault();
+          return;
+        }
+        const operators = ["+", "-", "*", "/"];
+        const lastChar = currentInput.slice(-1);
+        if (operators.includes(key)) {
+          if (currentInput === "" || operators.includes(lastChar)) return;
+        }
+        currentInput += key;
+        display.value = currentInput;
+      });
+    </script>
+  </body>
+</html>

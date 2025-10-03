@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>To-Do Liste</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      input,
+      button {
+        padding: 10px;
+        margin: 5px 0;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        margin: 5px 0;
+        padding: 5px;
+        background: #eee;
+      }
+      nav {
+        margin-top: 20px;
+        text-align: center;
+      }
+      nav a {
+        text-decoration: none;
+        color: #3498db;
+        font-weight: bold;
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 4vw;
+          font-size: 4vw;
+        }
+        h1 {
+          font-size: 7vw;
+        }
+        input,
+        button {
+          padding: 4vw;
+          font-size: 4vw;
+          width: 90vw;
+          box-sizing: border-box;
+        }
+        ul {
+          padding: 0;
+        }
+        li {
+          font-size: 4vw;
+          padding: 3vw;
+          margin: 2vw 0;
+        }
+        nav {
+          margin-top: 8vw;
+        }
+        nav a {
+          font-size: 5vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📝To-Do Liste</h1>
+    <input type="text" id="todoInput" placeholder="Neue Aufgabe..." />
+    <button onclick="addTodo()">Hinzufügen</button>
+    <ul id="todoList"></ul>
+    <nav>
+      <a href="index.html">Zurück zur Projektseite</a>
+    </nav>
+    <script>
+      function addTodo() {
+        const input = document.getElementById("todoInput");
+        const text = input.value.trim();
+        if (text === "") return;
+
+        const li = document.createElement("li");
+        li.textContent = text;
+
+        li.addEventListener("click", () => {
+          li.remove(); // klick = löschen
+        });
+
+        document.getElementById("todoList").appendChild(li);
+        input.value = "";
+      }
+    </script>
+  </body>
+</html>
